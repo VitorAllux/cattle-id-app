@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
 import NfcScreen from '../screens/nfc-screen/NfcScreen';
+import HomeScreen from '../screens/home-screen/HomeScreen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -18,7 +18,7 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Home' }}
+          options={{ title: 'Home', headerShown: false }}
         />
         <Stack.Screen
           name="NFC"

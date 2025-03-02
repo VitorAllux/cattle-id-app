@@ -2,8 +2,8 @@ import React from 'react';
 import { SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import useNfcReader from '../../hooks/nfc/useNfcReader';
 import useNfcWriter from '../../hooks/nfc/useNfcWriter';
-import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
-import TagContent from '../../components/TagContent/TagContent';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
+import TagContent from '../../components/tag-content/TagContent';
 import { styles } from './nfcScreen.styles';
 
 const NfcScreen = () => {
