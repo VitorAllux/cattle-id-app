@@ -8,7 +8,7 @@ export class CattleResource extends BaseResource<CattleDTO> {
 
   async getAll(): Promise<CattleDTO[]> {
     const data = await super.getAll();
-    console.log(data);
+
     return data.map((item: any) => CattleDTO.createFromResource(item));
   }
 

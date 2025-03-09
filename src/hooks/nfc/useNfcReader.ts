@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
-import { saveLog } from '../../utils/logger';
 import { Alert } from 'react-native';
 
 const useNfcReader = () => {
@@ -24,7 +23,6 @@ const useNfcReader = () => {
     const readNfc = async () => {
         setIsReading(true);
         setTagContent(null);
-        await saveLog('Iniciando leitura de NFC...');
 
         try {
             const timeoutPromise = new Promise((_, reject) => {
@@ -39,20 +37,15 @@ const useNfcReader = () => {
             const decodedMessage = decodeNdefMessage(tag.ndefMessage);
             setTagContent(decodedMessage || JSON.stringify(tag, null, 2));
 
-            await saveLog('Tag NFC lida com sucesso: ' + JSON.stringify(tag));
-
             Alert.alert('NFC Tag Detected', 'Tag lida com sucesso!');
         } catch (ex: any) {
             const errorMessage = 'Falha ao ler a tag NFC: ' + ex.message;
-
-            await saveLog(errorMessage);
 
             Alert.alert('Error', errorMessage);
         } finally {
             setIsReading(false);
 
             await NfcManager.cancelTechnologyRequest();
-            await saveLog('Leitura de NFC finalizada.');
         }
     };
 

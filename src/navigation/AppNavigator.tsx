@@ -6,6 +6,8 @@ import HomeScreen from '../screens/home-screen/HomeScreen';
 import CattleListScreen from '../screens/cattle-list-screen/CattleListScreen';
 import NfcScreen from '../screens/nfc-screen/NfcScreen';
 import CustomHeader from '../components/custom-header/CustomHeader';
+import SyncScreen from '../screens/sync-screen/SyncScreen';
+import { CattleDTO } from '../dtos/CattleDTO';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -13,6 +15,7 @@ export type RootStackParamList = {
   CattleList: undefined;
   NFC: undefined;
   AnimalSearch: undefined;
+  TagSync: { cattle: CattleDTO };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -33,6 +36,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Home" component={HomeScreen} options={screenOptions} />
         <Stack.Screen name="CattleList" component={CattleListScreen} options={screenOptions} />
         <Stack.Screen name="NFC" component={NfcScreen} options={screenOptions} />
+        <Stack.Screen name="TagSync" component={SyncScreen} options={screenOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

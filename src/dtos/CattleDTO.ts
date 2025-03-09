@@ -1,9 +1,13 @@
+import { CattleTagStatusEnum } from '../enums/CattleTagStatusEnum';
+
+
 export type CattleDTO = {
     id: number;
     name: string;
     age: number;
     vaccines: string;
     status: string;
+    tag_status: CattleTagStatusEnum;
     active: boolean;
     nfc_tag: {
       id: number;
@@ -24,6 +28,7 @@ export type CattleDTO = {
       age: data.age,
       vaccines: data.vaccines,
       status: data.status,
+      tag_status: data.tag_status as CattleTagStatusEnum,
       active: data.active,
       nfc_tag: data.nfc_tag
         ? [

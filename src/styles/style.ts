@@ -30,6 +30,12 @@ export const COLORS = {
   textSecondary: '#777',
   border: '#e0e0e0',
   danger: '#ff5252',
+  warning: '#ff9800',
+  success: '#4caf50',
+  darkGray: '#444',
+  lightGray: '#f5f5f5',
+  white: '#fff',
+  black: '#000',
 };
 
 export default masterStyles;
