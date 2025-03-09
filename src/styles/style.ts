@@ -11,7 +11,7 @@ const masterStyles = StyleSheet.create({
     color: '#333',
   },
   buttonPrimary: {
-    backgroundColor: '#ffa600',
+    backgroundColor: '#E91E63',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
@@ -24,7 +24,7 @@ const masterStyles = StyleSheet.create({
 });
 
 export const COLORS = {
-  primary: '#ffa600',
+  primary: '#E91E63',
   background: '#f5f5f5',
   textPrimary: '#333',
   textSecondary: '#777',

@@ -1,14 +1,11 @@
 import React from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
-
+import { AuthProvider } from './context/AuthContext';
 import AppNavigator from './navigation/AppNavigator';
 
-const App = () => {
+export default function App() {
   return (
-    <PaperProvider>
+    <AuthProvider>
       <AppNavigator />
-    </PaperProvider>
+    </AuthProvider>
   );
-};
-
-export default App;
+}

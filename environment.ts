@@ -1,3 +1,3 @@
 export const ENV = {
-    API_URL: 'http://192.168.0.119:8000',
+    API_URL: 'http://192.168.0.119:8000/api',
 };

@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { COLORS } from '../../styles/style';
 
 interface LoadingIndicatorProps {
   loadingText: string;
   color?: string;
 }
 
-const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ loadingText, color = '#ffa600' }) => {
+const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ loadingText, color = COLORS.primary }) => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color={color} />

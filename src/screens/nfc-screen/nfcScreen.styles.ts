@@ -1,16 +1,18 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../styles/style';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: COLORS.primary,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -18,46 +20,20 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#ffa600',
+    backgroundColor: COLORS.primary,
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 8,
     flex: 1,
     alignItems: 'center',
   },
   disabledButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#CCC',
   },
   buttonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontWeight: 'bold',
   },
   buttonSpacer: {
     width: 10,
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#333',
-  },
-  tagContentContainer: {
-    margin: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    maxHeight: 200,
-  },
-  tagContentTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  tagContentText: {
-    fontSize: 14,
   },
 });

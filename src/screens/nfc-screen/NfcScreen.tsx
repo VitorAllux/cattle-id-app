@@ -21,12 +21,9 @@ const NfcScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>NFC Reader</Text>
-
       {isReading && <LoadingIndicator loadingText="Lendo tag NFC..." />}
       {isWriting && <LoadingIndicator loadingText="Gravando na tag NFC..." />}
-
       {tagContent && <TagContent content={tagContent} />}
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, (isReading || isWriting) && styles.disabledButton]}
