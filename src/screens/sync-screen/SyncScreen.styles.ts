@@ -39,6 +39,25 @@ const syncScreenStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.primary,
   },
+  tagContent: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  tagContentText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.darkGray,
+  },
+  syncMessageText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: COLORS.darkGray,
+    textAlign: 'center',
+  },
 });
 
 export default syncScreenStyles;

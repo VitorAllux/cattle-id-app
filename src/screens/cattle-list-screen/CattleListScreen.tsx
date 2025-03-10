@@ -30,6 +30,14 @@ const CattleListScreen = () => {
   }, [cattleResource]);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchCattles();
+    });
+
+    return unsubscribe;
+  }, [navigation, fetchCattles]);
+
+  useEffect(() => {
     fetchCattles();
   }, [fetchCattles]);
 
@@ -40,6 +48,7 @@ const CattleListScreen = () => {
   const handleDelete = async (id: number) => {
     try {
       await cattleResource.delete(id);
+
       fetchCattles();
     } catch (error) {}
   };

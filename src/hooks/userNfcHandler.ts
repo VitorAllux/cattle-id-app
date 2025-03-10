@@ -11,12 +11,14 @@ export interface NfcTagData {
   updated_at?: string;
 }
 
-const useNfcReader = () => {
-  const [isReading, setIsReading] = useState(false);
+const useNfcHandler = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [tagContent, setTagContent] = useState<NfcTagData | null>(null);
 
   const decodeNdefMessage = (ndefMessage: any): NfcTagData | null => {
-    if (!ndefMessage || ndefMessage.length === 0) {return null;}
+    if (!ndefMessage || ndefMessage.length === 0) {
+      return null;
+    }
 
     const payloads = ndefMessage
       .map((record: any) => {
@@ -35,8 +37,8 @@ const useNfcReader = () => {
     }
   };
 
-  const readNfc = async (): Promise<NfcTagData | null> => {
-    setIsReading(true);
+  const readAndWriteNfc = async (dataToWrite: any): Promise<NfcTagData | null> => {
+    setIsProcessing(true);
     setTagContent(null);
 
     try {
@@ -44,26 +46,44 @@ const useNfcReader = () => {
         setTimeout(() => reject(new Error('Timeout: Nenhuma tag NFC encontrada.')), 10000);
       });
 
+      // Inicia a sessão NFC
       await Promise.race([NfcManager.requestTechnology(NfcTech.Ndef), timeoutPromise]);
 
+      // Passo 1: Ler a tag NFC
       const tag = await NfcManager.getTag();
-      if (!tag) {throw new Error('Nenhuma tag NFC encontrada.');}
+      if (!tag) {
+        throw new Error('Nenhuma tag NFC encontrada.');
+      }
 
       const decodedMessage = decodeNdefMessage(tag.ndefMessage);
       setTagContent(decodedMessage);
 
       console.log('NFC Tag Detectada:', decodedMessage);
+
+      // Passo 2: Escrever na tag NFC (na mesma sessão)
+      const bytes = Ndef.encodeMessage([Ndef.textRecord(JSON.stringify(dataToWrite))]);
+      await NfcManager.ndefHandler.writeNdefMessage(bytes);
+
+      console.log('Dados gravados na tag NFC com sucesso!');
       return decodedMessage;
     } catch (ex: any) {
-      console.error('Falha ao ler a tag NFC:', ex.message);
-      return null;
+      console.error('Falha ao ler/gravar na tag NFC:', ex.message);
+      throw ex;
     } finally {
-      setIsReading(false);
+      setIsProcessing(false);
       await NfcManager.cancelTechnologyRequest();
     }
   };
 
-  return { isReading, tagContent, readNfc };
+  const disconnectNfc = async () => {
+    try {
+      await NfcManager.cancelTechnologyRequest();
+    } catch (error) {
+      console.error('Erro ao desconectar a tag NFC:', error);
+    }
+  };
+
+  return { isProcessing, tagContent, readAndWriteNfc, disconnectNfc };
 };
 
-export default useNfcReader;
+export default useNfcHandler;

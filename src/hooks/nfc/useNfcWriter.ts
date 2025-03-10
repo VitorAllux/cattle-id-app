@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
-import { Alert } from 'react-native';
 
 const useNfcWriter = () => {
     const [isWriting, setIsWriting] = useState(false);
@@ -19,11 +18,9 @@ const useNfcWriter = () => {
 
             await NfcManager.ndefHandler.writeNdefMessage(bytes);
 
-            Alert.alert('Sucesso', 'Dados gravados na tag NFC!');
+            console.log('Dados gravados na tag NFC com sucesso!');
         } catch (ex: any) {
-            const errorMessage = 'Falha ao gravar na tag NFC: ' + ex.message;
-
-            Alert.alert('Error', errorMessage);
+            console.error('Falha ao gravar na tag NFC:', ex.message);
         } finally {
             setIsWriting(false);
             await NfcManager.cancelTechnologyRequest();
