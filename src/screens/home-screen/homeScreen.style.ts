@@ -29,6 +29,17 @@ const homeScreenStyles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingHorizontal: 16,
+  },
 });
 
 export default homeScreenStyles;

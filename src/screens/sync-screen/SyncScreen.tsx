@@ -7,7 +7,7 @@ import { CattleDTO } from '../../dtos/CattleDTO';
 import { tagStatusColors, tagStatusTexts } from '../../enums/CattleTagStatusEnum';
 import syncScreenStyles from './SyncScreen.styles';
 import { CattleResource } from '../../resources/CattleResource';
-import useNfcHandler from '../../hooks/userNfcHandler';
+import useNfcHandler from '../../hooks/nfc/userNfcHandler';
 
 type RootStackParamList = {
   TagSync: { cattle: CattleDTO };
@@ -71,17 +71,14 @@ const SyncScreen: React.FC = () => {
         return;
       }
 
-      // Verifica se a tag já está vinculada a outro gado
       if (entity_type === 'cattle') {
         const fetchedCattle = await cattleResource.checkCattle(Number(entity_id));
 
         if (!fetchedCattle) {
-          // Se a tag não estiver vinculada, sincroniza com o gado atual
           await cattleResource.syncCattleTag(cattle.id, tagData);
           setSyncMessage('Sincronizado com sucesso!');
           navigation.goBack();
         } else if (fetchedCattle.id !== cattle.id) {
-          // Se a tag estiver vinculada a outro gado, pergunta se deseja substituir
           Alert.alert(
             'Tag NFC já vinculada',
             `Essa tag NFC já está vinculada ao gado "${fetchedCattle.name}". Deseja substituir a vinculação?`,

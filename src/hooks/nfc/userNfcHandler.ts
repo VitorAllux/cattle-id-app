@@ -46,10 +46,8 @@ const useNfcHandler = () => {
         setTimeout(() => reject(new Error('Timeout: Nenhuma tag NFC encontrada.')), 10000);
       });
 
-      // Inicia a sessão NFC
       await Promise.race([NfcManager.requestTechnology(NfcTech.Ndef), timeoutPromise]);
 
-      // Passo 1: Ler a tag NFC
       const tag = await NfcManager.getTag();
       if (!tag) {
         throw new Error('Nenhuma tag NFC encontrada.');
@@ -60,7 +58,6 @@ const useNfcHandler = () => {
 
       console.log('NFC Tag Detectada:', decodedMessage);
 
-      // Passo 2: Escrever na tag NFC (na mesma sessão)
       const bytes = Ndef.encodeMessage([Ndef.textRecord(JSON.stringify(dataToWrite))]);
       await NfcManager.ndefHandler.writeNdefMessage(bytes);
 

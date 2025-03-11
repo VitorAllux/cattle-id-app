@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
 
 export interface NfcTagData {
@@ -12,11 +12,10 @@ export interface NfcTagData {
 }
 
 const useNfcReader = () => {
-  const [isReading, setIsReading] = useState(false);
-  const [tagContent, setTagContent] = useState<NfcTagData | null>(null);
-
   const decodeNdefMessage = (ndefMessage: any): NfcTagData | null => {
-    if (!ndefMessage || ndefMessage.length === 0) {return null;}
+    if (!ndefMessage || ndefMessage.length === 0) {
+      return null;
+    }
 
     const payloads = ndefMessage
       .map((record: any) => {
@@ -36,34 +35,51 @@ const useNfcReader = () => {
   };
 
   const readNfc = async (): Promise<NfcTagData | null> => {
-    setIsReading(true);
-    setTagContent(null);
-
     try {
-      const timeoutPromise = new Promise<null>((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout: Nenhuma tag NFC encontrada.')), 10000);
-      });
+      if (await NfcManager.isSupported()) {
+        await NfcManager.requestTechnology(NfcTech.Ndef);
 
-      await Promise.race([NfcManager.requestTechnology(NfcTech.Ndef), timeoutPromise]);
+        const tag = await NfcManager.getTag();
+        if (!tag) {
+          throw new Error('Nenhuma tag NFC encontrada.');
+        }
 
-      const tag = await NfcManager.getTag();
-      if (!tag) {throw new Error('Nenhuma tag NFC encontrada.');}
-
-      const decodedMessage = decodeNdefMessage(tag.ndefMessage);
-      setTagContent(decodedMessage);
-
-      console.log('NFC Tag Detectada:', decodedMessage);
-      return decodedMessage;
+        const decodedMessage = decodeNdefMessage(tag.ndefMessage);
+        console.log('NFC Tag Detectada:', decodedMessage);
+        return decodedMessage;
+      } else {
+        console.error('NFC não é suportado neste dispositivo.');
+        return null;
+      }
     } catch (ex: any) {
-      console.error('Falha ao ler a tag NFC:', ex.message);
+      //console.error('Falha ao ler a tag NFC:', ex.message);
       return null;
     } finally {
-      setIsReading(false);
       await NfcManager.cancelTechnologyRequest();
     }
   };
 
-  return { isReading, tagContent, readNfc };
+  const startNfc = async () => {
+    try {
+      if (await NfcManager.isSupported()) {
+        await NfcManager.start();
+      } else {
+        console.error('NFC não é suportado neste dispositivo.');
+      }
+    } catch (error) {
+      console.error('Erro ao iniciar NFC:', error);
+    }
+  };
+
+  useEffect(() => {
+    startNfc();
+
+    return () => {
+      NfcManager.cancelTechnologyRequest();
+    };
+  }, []);
+
+  return { readNfc };
 };
 
 export default useNfcReader;
