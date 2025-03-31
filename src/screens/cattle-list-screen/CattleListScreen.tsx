@@ -9,6 +9,7 @@ import masterStyles, { COLORS } from '../../styles/style';
 import { CattleTagStatusEnum, tagStatusColors, tagStatusTexts } from '../../enums/CattleTagStatusEnum';
 import { cattleListScreenStyles } from './cattleListScreen.style';
 import { RootStackParamList } from '../../navigation/AppNavigator';
+import CattleMessageModal from '../../components/cattle-message-modal/CattleMessage.modal';
 
 type CattleListScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'CattleList'>;
 
@@ -17,6 +18,8 @@ const CattleListScreen = () => {
   const [cattles, setCattles] = useState<CattleDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [selectedCattle, setSelectedCattle] = useState<CattleDTO | null>(null);
   const cattleResource = useMemo(() => new CattleResource(), []);
 
   const fetchCattles = useCallback(async () => {
@@ -24,6 +27,7 @@ const CattleListScreen = () => {
       const data = await cattleResource.getAll();
       setCattles(data);
     } catch (error) {
+      console.error('Erro ao buscar gados:', error);
     } finally {
       setLoading(false);
     }
@@ -33,7 +37,6 @@ const CattleListScreen = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchCattles();
     });
-
     return unsubscribe;
   }, [navigation, fetchCattles]);
 
@@ -48,9 +51,15 @@ const CattleListScreen = () => {
   const handleDelete = async (id: number) => {
     try {
       await cattleResource.delete(id);
-
       fetchCattles();
-    } catch (error) {}
+    } catch (error) {
+      console.error('Erro ao deletar gado:', error);
+    }
+  };
+
+  const handleMessageButtonClick = (cattle: CattleDTO) => {
+    setSelectedCattle(cattle);
+    setShowMessageModal(true);
   };
 
   const renderItem = ({ item }: { item: CattleDTO }) => {
@@ -97,7 +106,7 @@ const CattleListScreen = () => {
                 </View>
               </View>
               <View style={cattleListScreenStyles.actionsContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleMessageButtonClick(item)}>
                   <Icon name="message" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -133,6 +142,18 @@ const CattleListScreen = () => {
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={cattleListScreenStyles.listContainer}
       />
+
+
+        {selectedCattle && (
+          <CattleMessageModal
+            cattleId={selectedCattle.id}
+            producer={selectedCattle.producer ?? undefined}
+            veterinarian={selectedCattle.veterinarian ?? undefined}
+            onClose={() => setShowMessageModal(false)}
+            visible={showMessageModal}
+          />
+        )}
+
     </SafeAreaView>
   );
 };

@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { CattleDTO } from '../../dtos/CattleDTO';
 import { tagStatusColors, tagStatusTexts } from '../../enums/CattleTagStatusEnum';
@@ -8,9 +13,10 @@ import { COLORS } from '../../styles/style';
 interface CattleDetailsModalProps {
   cattle: CattleDTO | null;
   onClose: () => void;
+  onOpenMessage: (cattle: CattleDTO) => void;
 }
 
-const CattleDetailsModal: React.FC<CattleDetailsModalProps> = ({ cattle, onClose }) => {
+const CattleDetailsModal: React.FC<CattleDetailsModalProps> = ({ cattle, onClose, onOpenMessage }) => {
   if (!cattle) {
     return null;
   }
@@ -18,7 +24,6 @@ const CattleDetailsModal: React.FC<CattleDetailsModalProps> = ({ cattle, onClose
   const tagStatus = cattle.tag_status as keyof typeof tagStatusTexts;
   const parameters = cattle.nfc_tag[0]?.parameters || {};
 
-  // Verifica se cattle.vaccines é uma string JSON válida
   let vaccines: string[] = [];
   try {
     vaccines = cattle.vaccines ? JSON.parse(cattle.vaccines) : [];
@@ -47,12 +52,16 @@ const CattleDetailsModal: React.FC<CattleDetailsModalProps> = ({ cattle, onClose
 
           <View style={styles.detailRow}>
             <Icon name="tag" size={20} color={COLORS.primary} />
-            <Text style={styles.detailText}>Código: {cattle.nfc_tag[0]?.code || 'N/A'}</Text>
+            <Text style={styles.detailText}>
+              Código: {cattle.nfc_tag[0]?.code || 'N/A'}
+            </Text>
           </View>
 
           <View style={styles.detailRow}>
             <Icon name="scale" size={20} color={COLORS.primary} />
-            <Text style={styles.detailText}>Peso: {parameters.weight || 'N/A'} kg</Text>
+            <Text style={styles.detailText}>
+              Peso: {parameters.weight || 'N/A'} kg
+            </Text>
           </View>
 
           <View style={styles.detailRow}>
@@ -69,20 +78,32 @@ const CattleDetailsModal: React.FC<CattleDetailsModalProps> = ({ cattle, onClose
 
           <View style={styles.detailRow}>
             <Icon name="check-circle" size={20} color={COLORS.primary} />
-            <Text style={styles.detailText}>Ativo: {cattle.active ? 'Sim' : 'Não'}</Text>
+            <Text style={styles.detailText}>
+              Ativo: {cattle.active ? 'Sim' : 'Não'}
+            </Text>
           </View>
 
           <View style={styles.detailRow}>
             <Icon name="nfc" size={20} color={COLORS.primary} />
             <Text style={styles.detailText}>Status da Tag: </Text>
-            <View style={[styles.tagStatusBadge, { backgroundColor: tagStatusColors[tagStatus] }]}>
-              <Text style={styles.tagStatusText}>{tagStatusTexts[tagStatus]}</Text>
+            <View
+              style={[
+                styles.tagStatusBadge,
+                { backgroundColor: tagStatusColors[tagStatus] },
+              ]}
+            >
+              <Text style={styles.tagStatusText}>
+                {tagStatusTexts[tagStatus]}
+              </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => onOpenMessage(cattle)}
+          >
             <Icon name="message" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>

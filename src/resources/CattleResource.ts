@@ -8,17 +8,32 @@ export class CattleResource extends BaseResource<CattleDTO> {
   }
 
   async getAll(): Promise<CattleDTO[]> {
-    const data = await super.getAll();
-    return data.map((item: any) => CattleDTO.createFromResource(item));
+    try {
+      const response = await api.get(`/${this.endpoint}`);
+      return response.data.data.map((item: any) => CattleDTO.createFromResource(item));
+    } catch (error) {
+      console.error('Erro ao buscar gados:', error);
+      throw new Error('Erro ao buscar gados');
+    }
   }
 
   async getById(id: number): Promise<CattleDTO> {
-    const data = await super.getById(id);
-    return CattleDTO.createFromResource(data);
+    try {
+      const response = await api.get(`/${this.endpoint}/${id}`);
+      return CattleDTO.createFromResource(response.data.data);
+    } catch (error) {
+      console.error('Erro ao buscar gado:', error);
+      throw error;
+    }
   }
 
   async delete(id: number): Promise<void> {
-    await super.delete(id);
+    try {
+      await api.delete(`/${this.endpoint}/${id}`);
+    } catch (error) {
+      console.error('Erro ao deletar gado:', error);
+      throw error;
+    }
   }
 
   async checkCattle(id: number): Promise<CattleDTO | null> {
@@ -38,7 +53,6 @@ export class CattleResource extends BaseResource<CattleDTO> {
         old_nfc_data: oldNfcData,
         old_cattle_id: oldCattleId,
       });
-
       return response.data;
     } catch (error) {
       console.error('Erro ao sincronizar tag NFC:', error);
