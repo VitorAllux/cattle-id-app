@@ -147,8 +147,6 @@ const CattleListScreen = () => {
         {selectedCattle && (
           <CattleMessageModal
             cattleId={selectedCattle.id}
-            producer={selectedCattle.producer ?? undefined}
-            veterinarian={selectedCattle.veterinarian ?? undefined}
             onClose={() => setShowMessageModal(false)}
             visible={showMessageModal}
           />

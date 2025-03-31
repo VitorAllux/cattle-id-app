@@ -101,8 +101,6 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
             {!!selectedCattle && (
                     <CattleMessageModal
                     cattleId={selectedCattle.id}
-                    producer={selectedCattle.producer ?? undefined}
-                    veterinarian={selectedCattle.veterinarian ?? undefined}
                     onClose={handleCloseMessageModalHomeScreen}
                     visible={isMessageModalVisible}
                 />
