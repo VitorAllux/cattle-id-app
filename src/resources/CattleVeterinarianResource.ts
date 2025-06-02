@@ -10,6 +10,7 @@ export class CattleVeterinarianResource extends BaseResource<CattleVeterinarianD
   async getByCattleId(cattleId: number): Promise<CattleVeterinarianDTO | null> {
     try {
       const response = await api.get(`/${this.endpoint}/cattle/${cattleId}`);
+
       return CattleVeterinarianDTO.createFromResource(response.data.data);
     } catch (error: any) {
       if (error.response && error.response.status === 404) {

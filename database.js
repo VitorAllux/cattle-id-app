@@ -1,10 +1,12 @@
 const mysql = require('mysql');
+const { ENV } = require('./environment');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123',
-    database: 'cattle_id'
+    host: ENV.DB_HOST,
+    port: ENV.DB_PORT,
+    user: ENV.DB_USER,
+    password: ENV.DB_PASSWORD,
+    database: ENV.DB_NAME,
 });
 
 connection.connect((err) => {
