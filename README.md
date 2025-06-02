@@ -16,7 +16,6 @@ Aplicativo móvel que consome a API do **[Cattle-ID Platform](https://cattle-id-
 | JDK                   | 17 (compilação Android 33+)       |
 | Android Studio        | SDK + AVD / drivers USB           |
 | React Native CLI      | instalado via `npx` (já incluso)  |
-| Git                   | qualquer versão recente           |
 | ADB                   | já vem com o Android SDK          |
 
 > No Windows, coloque **`adb`** e **`java`** no `PATH`.  
@@ -38,7 +37,7 @@ npm install          # ou yarn / pnpm install
 cp .environmentexample environment.js
 # edite API_URL para o IP do backend na rede Wi-Fi
 
-# 4. Limpar e rodar no dispositivo ou emulador
+# 4. Limpar e rodar no dispositivo via USB/WIFI ou emulador(não suporta leitura nfc atualmente)
 cd android
 ./gradlew clean
 cd ..
