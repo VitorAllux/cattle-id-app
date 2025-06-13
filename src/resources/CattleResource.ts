@@ -20,7 +20,8 @@ export class CattleResource extends BaseResource<CattleDTO> {
   async getById(id: number): Promise<CattleDTO> {
     try {
       const response = await api.get(`/${this.endpoint}/${id}`);
-      return CattleDTO.createFromResource(response.data.data);
+      console.log('Response data:', response.data);
+      return CattleDTO.createFromResource(response.data);
     } catch (error) {
       console.error('Erro ao buscar gado:', error);
       throw error;

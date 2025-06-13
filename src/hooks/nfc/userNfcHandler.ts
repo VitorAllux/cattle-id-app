@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
 
+let isNfcBusy = false;
+
 export interface NfcTagData {
   entity_id?: string;
   entity_type?: string;
@@ -38,6 +40,12 @@ const useNfcHandler = () => {
   };
 
   const readAndWriteNfc = async (dataToWrite: any): Promise<NfcTagData | null> => {
+    if (isNfcBusy) {
+      return null;
+    }
+
+    isNfcBusy = true;
+
     setIsProcessing(true);
     setTagContent(null);
 
@@ -68,7 +76,9 @@ const useNfcHandler = () => {
       throw ex;
     } finally {
       setIsProcessing(false);
+
       await NfcManager.cancelTechnologyRequest();
+      isNfcBusy = false;
     }
   };
 

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
 
+let isNfcBusy = false;
+
 export interface NfcTagData {
   entity_id?: string;
   entity_type?: string;
@@ -35,6 +37,12 @@ const useNfcReader = () => {
   };
 
   const readNfc = async (): Promise<NfcTagData | null> => {
+    if (isNfcBusy) {
+      return null;
+    }
+
+    isNfcBusy = true;
+
     try {
       if (await NfcManager.isSupported()) {
         await NfcManager.requestTechnology(NfcTech.Ndef);
@@ -56,6 +64,7 @@ const useNfcReader = () => {
       return null;
     } finally {
       await NfcManager.cancelTechnologyRequest();
+      isNfcBusy = false;
     }
   };
 
